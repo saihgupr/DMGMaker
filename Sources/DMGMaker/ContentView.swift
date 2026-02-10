@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 struct ContentView: View {
     @StateObject private var engine = DMGEngine()
     @State private var appURL: URL?
+    @State private var appIcon: NSImage?
     @State private var backgroundURL: URL?
     @State private var dmgName: String = "My App"
     
@@ -14,7 +15,7 @@ struct ContentView: View {
                 .fill(.ultraThinMaterial)
                 .ignoresSafeArea()
             
-            VStack(spacing: 40) {
+            VStack(spacing: 30) {
                 VStack(spacing: 8) {
                     Text("DMG Maker")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
@@ -29,7 +30,8 @@ struct ContentView: View {
                     DropSquare(
                         title: appURL?.lastPathComponent ?? "Drop .app bundle",
                         icon: "app.badge",
-                        isSelected: appURL != nil
+                        isSelected: appURL != nil,
+                        appIcon: appIcon
                     )
                     .onDrop(of: [.fileURL], isTargeted: nil) { providers in
                         handleAppDrop(providers: providers)
@@ -84,7 +86,8 @@ struct ContentView: View {
                 Text(engine.statusMessage)
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
                     .foregroundColor(.secondary)
-                    .padding(.bottom, 30)
+                    .frame(height: 20)
+                    .padding(.bottom, 20)
             }
         }
         .frame(width: 600, height: 500)
@@ -95,8 +98,10 @@ struct ContentView: View {
         provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
             guard let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) else { return }
             if url.pathExtension == "app" {
+                let icon = NSWorkspace.shared.icon(forFile: url.path)
                 DispatchQueue.main.async {
                     self.appURL = url
+                    self.appIcon = icon
                     self.dmgName = url.deletingPathExtension().lastPathComponent
                 }
             }

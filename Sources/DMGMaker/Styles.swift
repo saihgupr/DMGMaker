@@ -37,8 +37,9 @@ extension View {
 }
 struct DropSquare: View {
     let title: String
-    let icon: String
+    let icon: String // System icon name for placeholder
     let isSelected: Bool
+    var appIcon: NSImage? = nil // Actual app icon if available
     @State private var isHovered = false
     
     var body: some View {
@@ -56,11 +57,20 @@ struct DropSquare: View {
                     .scaleEffect(isHovered ? 1.02 : 1.0)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isHovered)
                 
-                VStack(spacing: 8) {
-                    Image(systemName: icon)
-                        .font(.system(size: 44, weight: .light))
-                        .symbolRenderingMode(.hierarchical)
-                        .foregroundColor(isSelected ? .blue : .primary.opacity(0.6))
+                VStack(spacing: 12) {
+                    if let appIcon = appIcon {
+                        Image(nsImage: appIcon)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 80, height: 80)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .shadow(radius: 5)
+                    } else {
+                        Image(systemName: icon)
+                            .font(.system(size: 44, weight: .light))
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundColor(isSelected ? .blue : .primary.opacity(0.6))
+                    }
                     
                     if isSelected {
                         Image(systemName: "checkmark.circle.fill")
@@ -80,6 +90,7 @@ struct DropSquare: View {
                 .foregroundColor(.primary.opacity(0.8))
                 .multilineTextAlignment(.center)
                 .frame(width: 180)
+                .lineLimit(2)
         }
     }
 }

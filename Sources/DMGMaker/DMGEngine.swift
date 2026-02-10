@@ -39,8 +39,8 @@ class DMGEngine: ObservableObject {
             "--window-pos", "200", "120",
             "--window-size", "600", "400",
             "--icon-size", "128",
-            "--app-drop-link", "425", "120",
-            "--icon", outputName, "175", "120"
+            "--app-drop-link", "425", "190",
+            "--icon", appURL.deletingPathExtension().lastPathComponent, "175", "190"
         ]
         
         if let bg = backgroundURL {
