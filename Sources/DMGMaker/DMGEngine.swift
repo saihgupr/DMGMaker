@@ -39,18 +39,32 @@ class DMGEngine: ObservableObject {
             "--window-pos", "200", "120",
             "--window-size", "600", "400",
             "--icon-size", "128",
-            "--app-drop-link", "425", "190",
-            "--icon", appURL.deletingPathExtension().lastPathComponent, "175", "190"
+            "--app-drop-link", "425", "200",
+            "--icon", appURL.deletingPathExtension().lastPathComponent, "175", "200"
         ]
         
+        var debugInfo = ""
         if let bg = backgroundURL {
             arguments.append(contentsOf: ["--background", bg.path])
-        } else if let defaultBG = Bundle.main.path(forResource: "DefaultBackground", ofType: "png") {
-            arguments.append(contentsOf: ["--background", defaultBG])
+            debugInfo = "Using custom background"
+        } else {
+            let possiblePaths = [
+                Bundle.module.path(forResource: "DefaultBackground", ofType: "png"),
+                Bundle.main.path(forResource: "DefaultBackground", ofType: "png"),
+                "Sources/DMGMaker/DefaultBackground.png",
+                "DefaultBackground.png",
+                "./DefaultBackground.png"
+            ]
+            
+            if let foundPath = possiblePaths.compactMap({ $0 }).first(where: { FileManager.default.fileExists(atPath: $0) }) {
+                arguments.append(contentsOf: ["--background", foundPath])
+                debugInfo = "Using bundled background"
+            } else {
+                debugInfo = "No background found"
+            }
         }
         
         arguments.append(contentsOf: [outputDMG.path, appURL.path])
-        
         process.arguments = arguments
         
         let pipe = Pipe()
@@ -58,13 +72,20 @@ class DMGEngine: ObservableObject {
         process.standardError = pipe
         
         process.terminationHandler = { _ in
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let output = String(data: data, encoding: .utf8) ?? ""
+            
             DispatchQueue.main.async {
                 self.isProcessing = false
                 if FileManager.default.fileExists(atPath: outputDMG.path) {
-                    self.statusMessage = "DMG Created Successfully!"
+                    self.statusMessage = "Success! (\(debugInfo))"
                     NSWorkspace.shared.activateFileViewerSelecting([outputDMG])
                 } else {
-                    self.statusMessage = "Creation failed. Check terminal output."
+                    let cleanError = output.components(separatedBy: "\n")
+                        .filter { !$0.isEmpty }
+                        .last ?? "Unknown Error"
+                    self.statusMessage = "Failed: \(cleanError) (\(debugInfo))"
+                    print("Full error: \(output)")
                 }
             }
         }

@@ -19,9 +19,6 @@ struct ContentView: View {
                 VStack(spacing: 8) {
                     Text("DMG Maker")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
-                    Text("Cheap and Cheerful DMG Creation")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
                 }
                 .padding(.top, 30)
                 
