@@ -117,6 +117,11 @@ class DMGEngine: ObservableObject {
             let stagingAppURL = tempDir.appendingPathComponent(appName)
             try fileManager.copyItem(at: appURL, to: stagingAppURL)
             
+            // 2b. Create symlink to /Applications folder for drag-and-drop install
+            let applicationsSymlink = tempDir.appendingPathComponent("Applications")
+            try fileManager.createSymbolicLink(atPath: applicationsSymlink.path, 
+                                              withDestinationPath: "/Applications")
+            
             // 3. Generate Background with Applications Icon & Arrow
             let bgPath = tempDir.appendingPathComponent("background.png")
             let bgImage = generateBackground(size: NSSize(width: 600, height: 400))
@@ -140,6 +145,7 @@ class DMGEngine: ObservableObject {
                 "--window-size", "600", "400",
                 "--icon-size", "128",
                 "--icon", appName, "120", "200",
+                "--icon", "Applications", "480", "200",
                 "--background", bgPath.path
             ]
             
