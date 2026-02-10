@@ -6,9 +6,87 @@ class DMGEngine: ObservableObject {
     @Published var isProcessing = false
     @Published var statusMessage = ""
     
+    private func generateBackground(size: NSSize) -> NSImage {
+        let image = NSImage(size: size)
+        image.lockFocus()
+        
+        // 1. Draw Random Gradient
+        let colors = [
+            NSColor(calibratedHue: CGFloat.random(in: 0...1), saturation: 0.7, brightness: 0.9, alpha: 1.0).cgColor,
+            NSColor(calibratedHue: CGFloat.random(in: 0...1), saturation: 0.6, brightness: 0.8, alpha: 1.0).cgColor,
+            NSColor(calibratedHue: CGFloat.random(in: 0...1), saturation: 0.5, brightness: 0.7, alpha: 1.0).cgColor
+        ]
+        
+        guard let context = NSGraphicsContext.current?.cgContext else {
+            image.unlockFocus()
+            return image
+        }
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: [0.0, 0.5, 1.0])!
+        
+        context.drawLinearGradient(gradient, 
+                                   start: CGPoint(x: 0, y: 0), 
+                                   end: CGPoint(x: size.width, y: size.height), 
+                                   options: [])
+        
+        // 2. Draw Applications Folder Icon
+        let iconSize: CGFloat = 128
+        let appsIconX: CGFloat = 450 - iconSize/2
+        let appsIconY: CGFloat = 160 - iconSize/2
+        
+        let applicationsIcon = NSWorkspace.shared.icon(forFile: "/Applications")
+        applicationsIcon.draw(in: NSRect(x: appsIconX, y: appsIconY, width: iconSize, height: iconSize),
+                             from: NSRect(x: 0, y: 0, width: applicationsIcon.size.width, height: applicationsIcon.size.height),
+                             operation: .sourceOver,
+                             fraction: 1.0)
+        
+        // 3. Draw "Applications" label
+        let labelAttributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: 13, weight: .medium),
+            .foregroundColor: NSColor.white.withAlphaComponent(0.95)
+        ]
+        let labelString = "Applications" as NSString
+        let labelSize = labelString.size(withAttributes: labelAttributes)
+        let labelX = 450 - labelSize.width/2
+        let labelY = appsIconY - 20
+        labelString.draw(at: CGPoint(x: labelX, y: labelY), withAttributes: labelAttributes)
+        
+        // 4. Draw Professional Install Arrow
+        let arrowY: CGFloat = 160
+        let arrowStartX: CGFloat = 220
+        let arrowEndX: CGFloat = 380
+        
+        context.saveGState()
+        
+        // Draw arrow shaft
+        context.setLineWidth(8)
+        context.setLineCap(.round)
+        context.setStrokeColor(NSColor.white.withAlphaComponent(0.85).cgColor)
+        context.move(to: CGPoint(x: arrowStartX, y: arrowY))
+        context.addLine(to: CGPoint(x: arrowEndX - 20, y: arrowY))
+        context.strokePath()
+        
+        // Draw filled arrow head (triangle)
+        let arrowHeadPath = CGMutablePath()
+        arrowHeadPath.move(to: CGPoint(x: arrowEndX, y: arrowY))
+        arrowHeadPath.addLine(to: CGPoint(x: arrowEndX - 20, y: arrowY - 12))
+        arrowHeadPath.addLine(to: CGPoint(x: arrowEndX - 20, y: arrowY + 12))
+        arrowHeadPath.closeSubpath()
+        
+        context.setFillColor(NSColor.white.withAlphaComponent(0.85).cgColor)
+        context.addPath(arrowHeadPath)
+        context.fillPath()
+        
+        context.restoreGState()
+        
+        image.unlockFocus()
+        return image
+    }
+    
     func createDMG(appURL: URL, backgroundURL: URL?, outputName: String) {
         isProcessing = true
-        statusMessage = "Starting DMG creation..."
+        statusMessage = "Preparing staging area..."
         
         // Find create-dmg
         let paths = ["/opt/homebrew/bin/create-dmg", "/usr/local/bin/create-dmg"]
@@ -26,76 +104,78 @@ class DMGEngine: ObservableObject {
             return
         }
         
+        let fileManager = FileManager.default
+        let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let outputDMG = appURL.deletingLastPathComponent().appendingPathComponent("\(outputName).dmg")
         
-        // Remove existing DMG if it exists
-        try? FileManager.default.removeItem(at: outputDMG)
-        
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: binPath)
-        
-        var arguments = [
-            "--volname", outputName,
-            "--window-pos", "200", "120",
-            "--window-size", "600", "400",
-            "--icon-size", "128",
-            "--app-drop-link", "425", "200",
-            "--icon", appURL.deletingPathExtension().lastPathComponent, "175", "200"
-        ]
-        
-        var debugInfo = ""
-        if let bg = backgroundURL {
-            arguments.append(contentsOf: ["--background", bg.path])
-            debugInfo = "Using custom background"
-        } else {
-            let possiblePaths = [
-                Bundle.module.path(forResource: "DefaultBackground", ofType: "png"),
-                Bundle.main.path(forResource: "DefaultBackground", ofType: "png"),
-                "Sources/DMGMaker/DefaultBackground.png",
-                "DefaultBackground.png",
-                "./DefaultBackground.png"
+        do {
+            // 1. Create Staging Directory
+            try fileManager.createDirectory(at: tempDir, withIntermediateDirectories: true)
+            
+            // 2. Prepare App in staging (Copy instead of symlink for better icon handling)
+            let appName = appURL.lastPathComponent
+            let stagingAppURL = tempDir.appendingPathComponent(appName)
+            try fileManager.copyItem(at: appURL, to: stagingAppURL)
+            
+            // 3. Generate Background with Applications Icon & Arrow
+            let bgPath = tempDir.appendingPathComponent("background.png")
+            let bgImage = generateBackground(size: NSSize(width: 600, height: 400))
+            if let tiffData = bgImage.tiffRepresentation, 
+               let bitmap = NSBitmapImageRep(data: tiffData),
+               let pngData = bitmap.representation(using: .png, properties: [:]) {
+                try pngData.write(to: bgPath)
+            }
+            
+            statusMessage = "Building DMG..."
+            
+            // 4. Create DMG
+            try? fileManager.removeItem(at: outputDMG)
+            
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: binPath)
+            
+            var arguments = [
+                "--volname", outputName,
+                "--window-pos", "200", "120",
+                "--window-size", "600", "400",
+                "--icon-size", "128",
+                "--icon", appName, "150", "160",
+                "--background", bgPath.path
             ]
             
-            if let foundPath = possiblePaths.compactMap({ $0 }).first(where: { FileManager.default.fileExists(atPath: $0) }) {
-                arguments.append(contentsOf: ["--background", foundPath])
-                debugInfo = "Using bundled background"
-            } else {
-                debugInfo = "No background found"
-            }
-        }
-        
-        arguments.append(contentsOf: [outputDMG.path, appURL.path])
-        process.arguments = arguments
-        
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = pipe
-        
-        process.terminationHandler = { _ in
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: data, encoding: .utf8) ?? ""
+            arguments.append(contentsOf: [outputDMG.path, tempDir.path])
+            process.arguments = arguments
             
-            DispatchQueue.main.async {
-                self.isProcessing = false
-                if FileManager.default.fileExists(atPath: outputDMG.path) {
-                    self.statusMessage = "Success! (\(debugInfo))"
-                    NSWorkspace.shared.activateFileViewerSelecting([outputDMG])
-                } else {
-                    let cleanError = output.components(separatedBy: "\n")
-                        .filter { !$0.isEmpty }
-                        .last ?? "Unknown Error"
-                    self.statusMessage = "Failed: \(cleanError) (\(debugInfo))"
-                    print("Full error: \(output)")
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.standardError = pipe
+            
+            process.terminationHandler = { _ in
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                let output = String(data: data, encoding: .utf8) ?? ""
+                
+                // Cleanup staging dir
+                try? FileManager.default.removeItem(at: tempDir)
+                
+                DispatchQueue.main.async {
+                    self.isProcessing = false
+                    if FileManager.default.fileExists(atPath: outputDMG.path) {
+                        self.statusMessage = "Success! ✨"
+                        NSWorkspace.shared.activateFileViewerSelecting([outputDMG])
+                    } else {
+                        let cleanError = output.components(separatedBy: "\n")
+                            .filter { !$0.isEmpty }
+                            .last ?? "Unknown Error"
+                        self.statusMessage = "Failed: \(cleanError)"
+                    }
                 }
             }
-        }
-        
-        do {
+            
             try process.run()
-            statusMessage = "Running create-dmg..."
         } catch {
-            statusMessage = "Process error: \(error.localizedDescription)"
+            statusMessage = "Error: \(error.localizedDescription)"
             isProcessing = false
+            try? fileManager.removeItem(at: tempDir)
         }
     }
 }
