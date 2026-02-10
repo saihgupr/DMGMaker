@@ -30,10 +30,10 @@ class DMGEngine: ObservableObject {
                                    end: CGPoint(x: size.width, y: size.height), 
                                    options: [])
         
-        // 2. Draw Applications Folder Icon
+        // 2. Draw Applications Folder Icon (right side, properly centered)
         let iconSize: CGFloat = 128
-        let appsIconX: CGFloat = 450 - iconSize/2
-        let appsIconY: CGFloat = 160 - iconSize/2
+        let appsIconX: CGFloat = 480 - iconSize/2
+        let appsIconY: CGFloat = 200 - iconSize/2
         
         let applicationsIcon = NSWorkspace.shared.icon(forFile: "/Applications")
         applicationsIcon.draw(in: NSRect(x: appsIconX, y: appsIconY, width: iconSize, height: iconSize),
@@ -48,33 +48,33 @@ class DMGEngine: ObservableObject {
         ]
         let labelString = "Applications" as NSString
         let labelSize = labelString.size(withAttributes: labelAttributes)
-        let labelX = 450 - labelSize.width/2
+        let labelX = 480 - labelSize.width/2
         let labelY = appsIconY - 20
         labelString.draw(at: CGPoint(x: labelX, y: labelY), withAttributes: labelAttributes)
         
         // 4. Draw Professional Install Arrow
-        let arrowY: CGFloat = 160
-        let arrowStartX: CGFloat = 220
-        let arrowEndX: CGFloat = 380
+        let arrowY: CGFloat = 200
+        let arrowStartX: CGFloat = 205
+        let arrowEndX: CGFloat = 405
         
         context.saveGState()
         
-        // Draw arrow shaft
-        context.setLineWidth(8)
+        // Draw arrow shaft with gradient effect
+        context.setLineWidth(6)
         context.setLineCap(.round)
-        context.setStrokeColor(NSColor.white.withAlphaComponent(0.85).cgColor)
+        context.setStrokeColor(NSColor.white.withAlphaComponent(0.9).cgColor)
         context.move(to: CGPoint(x: arrowStartX, y: arrowY))
-        context.addLine(to: CGPoint(x: arrowEndX - 20, y: arrowY))
+        context.addLine(to: CGPoint(x: arrowEndX - 25, y: arrowY))
         context.strokePath()
         
-        // Draw filled arrow head (triangle)
+        // Draw filled arrow head (triangle) - smoother proportions
         let arrowHeadPath = CGMutablePath()
         arrowHeadPath.move(to: CGPoint(x: arrowEndX, y: arrowY))
-        arrowHeadPath.addLine(to: CGPoint(x: arrowEndX - 20, y: arrowY - 12))
-        arrowHeadPath.addLine(to: CGPoint(x: arrowEndX - 20, y: arrowY + 12))
+        arrowHeadPath.addLine(to: CGPoint(x: arrowEndX - 25, y: arrowY - 15))
+        arrowHeadPath.addLine(to: CGPoint(x: arrowEndX - 25, y: arrowY + 15))
         arrowHeadPath.closeSubpath()
         
-        context.setFillColor(NSColor.white.withAlphaComponent(0.85).cgColor)
+        context.setFillColor(NSColor.white.withAlphaComponent(0.9).cgColor)
         context.addPath(arrowHeadPath)
         context.fillPath()
         
@@ -139,7 +139,7 @@ class DMGEngine: ObservableObject {
                 "--window-pos", "200", "120",
                 "--window-size", "600", "400",
                 "--icon-size", "128",
-                "--icon", appName, "150", "160",
+                "--icon", appName, "120", "200",
                 "--background", bgPath.path
             ]
             
@@ -160,7 +160,7 @@ class DMGEngine: ObservableObject {
                 DispatchQueue.main.async {
                     self.isProcessing = false
                     if FileManager.default.fileExists(atPath: outputDMG.path) {
-                        self.statusMessage = "Success! ✨"
+                        self.statusMessage = "DMG created successfully"
                         NSWorkspace.shared.activateFileViewerSelecting([outputDMG])
                     } else {
                         let cleanError = output.components(separatedBy: "\n")
