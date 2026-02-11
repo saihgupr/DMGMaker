@@ -72,6 +72,12 @@ class DMGEngine: ObservableObject {
             try fileManager.createSymbolicLink(at: appsSymlink, withDestinationURL: URL(fileURLWithPath: "/Applications"))
             try? fileManager.setAttributes([.extensionHidden: true], ofItemAtPath: appsSymlink.path)
             
+            // Apply custom Applications folder icon
+            let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
+            if let customImage = NSImage(contentsOfFile: customIconPath) {
+                NSWorkspace.shared.setIcon(customImage, forFile: appsSymlink.path, options: [])
+            }
+            
             statusMessage = "Building DMG..."
             
             // 5. Create DMG

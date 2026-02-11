@@ -37,28 +37,18 @@ struct DMGBackgroundView: View {
                         .shadow(color: .black.opacity(0.1), radius: 20, x: 0, y: 10)
                     
                     HStack(spacing: 40) {
-                        // App Placeholder Space
-                        RoundedRectangle(cornerRadius: 24)
-                            .fill(Color.white.opacity(0.05))
+                        // App Placement Area (Transparent)
+                        Color.clear
                             .frame(width: 140, height: 140)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 24)
-                                    .stroke(Color.white.opacity(0.1), style: StrokeStyle(lineWidth: 1, dash: [4]))
-                            )
                         
                         // Modern Arrow
                         ArrowView()
                             .frame(width: 80, height: 30)
                             .foregroundColor(.white.opacity(0.8))
                         
-                        // Applications Placeholder Space
-                        RoundedRectangle(cornerRadius: 24)
-                            .fill(Color.white.opacity(0.05))
+                        // Applications Placement Area (Transparent)
+                        Color.clear
                             .frame(width: 140, height: 140)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 24)
-                                    .stroke(Color.white.opacity(0.1), style: StrokeStyle(lineWidth: 1, dash: [4]))
-                            )
                     }
                 }
                 .frame(width: 520, height: 200)
