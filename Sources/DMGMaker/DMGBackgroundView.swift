@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DMGBackgroundView: View {
     let appName: String
+    let appsIconPath: String?
     let windowSize: CGSize = CGSize(width: 600, height: 450)
     
     var body: some View {
@@ -37,7 +38,7 @@ struct DMGBackgroundView: View {
                         .shadow(color: .black.opacity(0.1), radius: 20, x: 0, y: 10)
                     
                     HStack(spacing: 40) {
-                        // App Placement Area (Transparent)
+                        // App Placement Area (Transparent - Finder will place real icon here)
                         Color.clear
                             .frame(width: 140, height: 140)
                         
@@ -46,9 +47,16 @@ struct DMGBackgroundView: View {
                             .frame(width: 80, height: 30)
                             .foregroundColor(.white.opacity(0.8))
                         
-                        // Applications Placement Area (Transparent)
-                        Color.clear
-                            .frame(width: 140, height: 140)
+                        // Applications Icon Area
+                        ZStack {
+                            if let iconPath = appsIconPath, let image = NSImage(contentsOfFile: iconPath) {
+                                Image(nsImage: image)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 120, height: 120)
+                            }
+                        }
+                        .frame(width: 140, height: 140)
                     }
                 }
                 .frame(width: 520, height: 200)
@@ -122,5 +130,5 @@ struct ArrowView: View {
 }
 
 #Preview {
-    DMGBackgroundView(appName: "ExampleApp")
+    DMGBackgroundView(appName: "ExampleApp", appsIconPath: nil)
 }

@@ -8,7 +8,8 @@ class DMGEngine: ObservableObject {
     @Published var statusMessage = ""
     
     private func generateBackground(appName: String, size: NSSize) -> NSImage {
-        let view = DMGBackgroundView(appName: appName)
+        let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
+        let view = DMGBackgroundView(appName: appName, appsIconPath: customIconPath)
             .frame(width: size.width, height: size.height)
         
         let renderer = ImageRenderer(content: view)
