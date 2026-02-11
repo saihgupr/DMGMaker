@@ -30,29 +30,7 @@ class DMGEngine: ObservableObject {
                                    end: CGPoint(x: size.width, y: size.height), 
                                    options: [])
         
-        // 2. Draw Applications Folder Icon (right side, properly centered)
-        let iconSize: CGFloat = 128
-        let appsIconX: CGFloat = 480 - iconSize/2
-        let appsIconY: CGFloat = 200 - iconSize/2
-        
-        let applicationsIcon = NSWorkspace.shared.icon(forFile: "/Applications")
-        applicationsIcon.draw(in: NSRect(x: appsIconX, y: appsIconY, width: iconSize, height: iconSize),
-                             from: NSRect(x: 0, y: 0, width: applicationsIcon.size.width, height: applicationsIcon.size.height),
-                             operation: .sourceOver,
-                             fraction: 1.0)
-        
-        // 3. Draw "Applications" label
-        let labelAttributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: 13, weight: .medium),
-            .foregroundColor: NSColor.white.withAlphaComponent(0.95)
-        ]
-        let labelString = "Applications" as NSString
-        let labelSize = labelString.size(withAttributes: labelAttributes)
-        let labelX = 480 - labelSize.width/2
-        let labelY = appsIconY - 20
-        labelString.draw(at: CGPoint(x: labelX, y: labelY), withAttributes: labelAttributes)
-        
-        // 4. Draw Professional Install Arrow
+         // 2. Draw Professional Install Arrow
         let arrowY: CGFloat = 200
         let arrowStartX: CGFloat = 205
         let arrowEndX: CGFloat = 405
@@ -79,6 +57,28 @@ class DMGEngine: ObservableObject {
         context.fillPath()
         
         context.restoreGState()
+        
+        // 3. Draw Applications Folder Icon
+        let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
+        let appIcon: NSImage
+        if let customImage = NSImage(contentsOfFile: customIconPath) {
+            appIcon = customImage
+        } else {
+            appIcon = NSWorkspace.shared.icon(forFile: "/Applications")
+        }
+        
+        let iconSize: CGFloat = 120 // Slightly smaller than 128 to match create-dmg spacing
+        let iconRect = CGRect(x: 480 - (iconSize / 2), y: 200 - (iconSize / 2), width: iconSize, height: iconSize)
+        
+        // We need to flip the drawing because CGContext is usually flipped relative to NSImage
+        // But since we are inside image.lockFocus(), the coordinate system is NS (Origin Bottom-Left)
+        // However, CGContext might need handling. Let's try drawing the NSImage directly.
+        
+        // Actually, since we are lockFocus'd, we can just use NSImage drawing methods which are easier
+        // But for consistency with CGContext above, let's stick to CG or just mix.
+        // Mixing is fine.
+        
+        appIcon.draw(in: iconRect)
         
         image.unlockFocus()
         return image
@@ -117,12 +117,7 @@ class DMGEngine: ObservableObject {
             let stagingAppURL = tempDir.appendingPathComponent(appName)
             try fileManager.copyItem(at: appURL, to: stagingAppURL)
             
-            // 2b. Create symlink to /Applications folder for drag-and-drop install
-            let applicationsSymlink = tempDir.appendingPathComponent("Applications")
-            try fileManager.createSymbolicLink(atPath: applicationsSymlink.path, 
-                                              withDestinationPath: "/Applications")
-            
-            // 3. Generate Background with Applications Icon & Arrow
+            // 3. Generate Background with Arrow
             let bgPath = tempDir.appendingPathComponent("background.png")
             let bgImage = generateBackground(size: NSSize(width: 600, height: 400))
             if let tiffData = bgImage.tiffRepresentation, 
@@ -145,7 +140,7 @@ class DMGEngine: ObservableObject {
                 "--window-size", "600", "400",
                 "--icon-size", "128",
                 "--icon", appName, "120", "200",
-                "--icon", "Applications", "480", "200",
+                "--app-drop-link", "480", "200",
                 "--background", bgPath.path
             ]
             
