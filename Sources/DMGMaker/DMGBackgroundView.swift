@@ -3,7 +3,7 @@ import SwiftUI
 struct DMGBackgroundView: View {
     let appName: String
     let appsIconPath: String?
-    let windowSize: CGSize = CGSize(width: 600, height: 450)
+    let windowSize: CGSize = CGSize(width: 600, height: 520)
     
     var body: some View {
         ZStack {
@@ -25,9 +25,12 @@ struct DMGBackgroundView: View {
                 .offset(x: 180, y: 120)
 
             VStack(spacing: 0) {
-                Spacer()
-                
                 // 3. Central Instruction Area (Glass Track)
+                // Positioned with a fixed top padding of 100px
+                // Total height of track is 200px, so center is exactly at Y=200
+                Spacer()
+                    .frame(height: 100)
+                
                 ZStack {
                     RoundedRectangle(cornerRadius: 32)
                         .fill(.ultraThinMaterial)
@@ -38,7 +41,7 @@ struct DMGBackgroundView: View {
                         .shadow(color: .black.opacity(0.1), radius: 20, x: 0, y: 10)
                     
                     HStack(spacing: 40) {
-                        // App Placement Area (Transparent - Finder will place real icon here)
+                        // App Placeholder (Logo will be placed by Finder at 150, 200)
                         Color.clear
                             .frame(width: 140, height: 140)
                         
@@ -47,14 +50,14 @@ struct DMGBackgroundView: View {
                             .frame(width: 80, height: 30)
                             .foregroundColor(.white.opacity(0.8))
                         
-                        // Applications Icon Area
+                        // Applications Icon Area (Drawn into background for crispness)
                         ZStack {
                             if let iconPath = appsIconPath, let image = NSImage(contentsOfFile: iconPath) {
                                 Image(nsImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 110, height: 110) // Slightly smaller to match squircle visual weight
-                                    .offset(y: -5) // Offset to account for folder tab
+                                    .frame(width: 115, height: 115) // Matched App Store visual weight
+                                    .offset(y: -5) // Visual adjustment for folder tab
                             }
                         }
                         .frame(width: 140, height: 140)
@@ -63,21 +66,20 @@ struct DMGBackgroundView: View {
                 .frame(width: 520, height: 200)
                 
                 Spacer()
-                    .frame(height: 40)
+                    .frame(height: 50)
                 
                 // 4. Instructions
-                VStack(spacing: 4) {
+                VStack(spacing: 8) {
                     Text("To install \(appName),")
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
                     Text("drag the icon into the Applications folder")
-                        .font(.system(size: 14, weight: .regular, design: .rounded))
                         .opacity(0.7)
                 }
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
                 
                 Spacer()
-                    .frame(height: 50)
+                    .frame(height: 70)
             }
         }
         .frame(width: windowSize.width, height: windowSize.height)

@@ -60,18 +60,23 @@ class DMGEngine: ObservableObject {
             
             // 3. Generate Background with Arrow (Outside staging to avoid duplication)
             let bgPath = assetsDir.appendingPathComponent("background.png")
-            // New size 600x450 to accommodate instructions at bottom
-            let bgImage = generateBackground(appName: outputName, size: NSSize(width: 600, height: 450))
+            // Increased height to 520 to avoid cutting off text
+            let bgImage = generateBackground(appName: outputName, size: NSSize(width: 600, height: 520))
             if let tiffData = bgImage.tiffRepresentation, 
                let bitmap = NSBitmapImageRep(data: tiffData),
                let pngData = bitmap.representation(using: .png, properties: [:]) {
                 try pngData.write(to: bgPath)
             }
             
-            // 4. Create Applications Symlink (Using a trailing space to dodge default Finder halo)
-            let appsDirName = "Applications " 
+            // 4. Create Applications Symlink 
+            // We use a non-breaking space (Unicode 00A0) to make the name look like "Applications" 
+            // but trick Finder into not adding the default dashed "halo" box.
+            let appsDirName = "Applications\u{00A0}" 
             let appsSymlink = tempDir.appendingPathComponent(appsDirName)
             try fileManager.createSymbolicLink(at: appsSymlink, withDestinationURL: URL(fileURLWithPath: "/Applications"))
+            
+            // Hide extension explicitly
+            try? fileManager.setAttributes([.extensionHidden: true], ofItemAtPath: appsSymlink.path)
             
             // Apply custom Applications folder icon
             let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
@@ -90,10 +95,10 @@ class DMGEngine: ObservableObject {
             var arguments = [
                 "--volname", outputName,
                 "--window-pos", "200", "120",
-                "--window-size", "600", "450",
+                "--window-size", "600", "520",
                 "--icon-size", "128",
-                "--icon", appName, "150", "215",
-                "--icon", appsDirName, "450", "215",
+                "--icon", appName, "150", "200",
+                "--icon", appsDirName, "450", "200",
                 "--background", bgPath.path,
                 "--hide-extension", appName,
                 "--hide-extension", appsDirName
