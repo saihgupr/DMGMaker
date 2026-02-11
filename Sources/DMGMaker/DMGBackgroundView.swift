@@ -53,7 +53,8 @@ struct DMGBackgroundView: View {
                                 Image(nsImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 120, height: 120)
+                                    .frame(width: 110, height: 110) // Slightly smaller to match squircle visual weight
+                                    .offset(y: -5) // Offset to account for folder tab
                             }
                         }
                         .frame(width: 140, height: 140)

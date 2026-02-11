@@ -68,10 +68,10 @@ class DMGEngine: ObservableObject {
                 try pngData.write(to: bgPath)
             }
             
-            // 4. Create Applications Symlink (Bypassing create-dmg's automatic halo)
-            let appsSymlink = tempDir.appendingPathComponent("Applications")
+            // 4. Create Applications Symlink (Using a trailing space to dodge default Finder halo)
+            let appsDirName = "Applications " 
+            let appsSymlink = tempDir.appendingPathComponent(appsDirName)
             try fileManager.createSymbolicLink(at: appsSymlink, withDestinationURL: URL(fileURLWithPath: "/Applications"))
-            try? fileManager.setAttributes([.extensionHidden: true], ofItemAtPath: appsSymlink.path)
             
             // Apply custom Applications folder icon
             let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
@@ -92,11 +92,11 @@ class DMGEngine: ObservableObject {
                 "--window-pos", "200", "120",
                 "--window-size", "600", "450",
                 "--icon-size", "128",
-                "--icon", appName, "150", "200", // Shifted to match glass track
-                "--icon", "Applications", "450", "200", // Shifted to match glass track
+                "--icon", appName, "150", "215",
+                "--icon", appsDirName, "450", "215",
                 "--background", bgPath.path,
                 "--hide-extension", appName,
-                "--hide-extension", "Applications"
+                "--hide-extension", appsDirName
             ]
             
             arguments.append(contentsOf: [outputDMG.path, tempDir.path])
