@@ -59,9 +59,9 @@ class DMGEngine: ObservableObject {
         context.restoreGState()
         
         // 3. Draw Applications Folder Icon
-        let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
         let appIcon: NSImage
-        if let customImage = NSImage(contentsOfFile: customIconPath) {
+        if let iconURL = Bundle.module.url(forResource: "applications-folder", withExtension: "png"),
+           let customImage = NSImage(contentsOf: iconURL) {
             appIcon = customImage
         } else {
             appIcon = NSWorkspace.shared.icon(forFile: "/Applications")
@@ -70,15 +70,33 @@ class DMGEngine: ObservableObject {
         let iconSize: CGFloat = 120 // Slightly smaller than 128 to match create-dmg spacing
         let iconRect = CGRect(x: 480 - (iconSize / 2), y: 200 - (iconSize / 2), width: iconSize, height: iconSize)
         
-        // We need to flip the drawing because CGContext is usually flipped relative to NSImage
-        // But since we are inside image.lockFocus(), the coordinate system is NS (Origin Bottom-Left)
-        // However, CGContext might need handling. Let's try drawing the NSImage directly.
-        
-        // Actually, since we are lockFocus'd, we can just use NSImage drawing methods which are easier
-        // But for consistency with CGContext above, let's stick to CG or just mix.
-        // Mixing is fine.
-        
         appIcon.draw(in: iconRect)
+        
+        // 4. Add "Drag to Applications" Label
+        let text = "Drag to Applications" as NSString
+        let font = NSFont.systemFont(ofSize: 14, weight: .semibold)
+        let textColor = NSColor.white.withAlphaComponent(0.95)
+        let shadow = NSShadow()
+        shadow.shadowColor = NSColor.black.withAlphaComponent(0.3)
+        shadow.shadowOffset = NSSize(width: 0, height: -1)
+        shadow.shadowBlurRadius = 2
+        
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: textColor,
+            .shadow: shadow
+        ]
+
+        let textSize = text.size(withAttributes: textAttributes)
+        // Center text horizontally, position below the icons
+        let textRect = CGRect(
+            x: (size.width - textSize.width) / 2,
+            y: 110,
+            width: textSize.width,
+            height: textSize.height
+        )
+
+        text.draw(in: textRect, withAttributes: textAttributes)
         
         image.unlockFocus()
         return image
