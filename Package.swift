@@ -14,7 +14,8 @@ let package = Package(
             name: "DMGMaker",
             path: "Sources/DMGMaker",
             resources: [
-                .process("DefaultBackground.png")
+                .process("DefaultBackground.png"),
+                .process("applications-folder.png")
             ]
         )
     ]
