@@ -40,22 +40,24 @@ struct DropSquare: View {
     let icon: String // System icon name for placeholder
     let isSelected: Bool
     var appIcon: NSImage? = nil // Actual app icon if available
+    var isTargeted: Bool = false // Dragging state
     @State private var isHovered = false
     
     var body: some View {
         VStack(spacing: 16) {
             ZStack {
                 RoundedRectangle(cornerRadius: AppStyles.roundedCornerRadius)
-                    .strokeBorder(isSelected ? Color.blue : AppStyles.borderColor, 
-                                 style: StrokeStyle(lineWidth: 2, 
-                                                   dash: isSelected ? [] : [AppStyles.dashLength, AppStyles.dashSpacing]))
+                    .strokeBorder(isSelected || isTargeted ? Color.blue : AppStyles.borderColor,
+                                 style: StrokeStyle(lineWidth: isTargeted ? 3 : 2,
+                                                   dash: (isSelected || isTargeted) ? [] : [AppStyles.dashLength, AppStyles.dashSpacing]))
                     .background(
                         RoundedRectangle(cornerRadius: AppStyles.roundedCornerRadius)
-                            .fill(isSelected ? Color.blue.opacity(0.1) : Color.white.opacity(0.05))
+                            .fill(isTargeted ? Color.blue.opacity(0.15) : (isSelected ? Color.blue.opacity(0.1) : Color.white.opacity(0.05)))
                     )
                     .liquidGlass()
-                    .scaleEffect(isHovered ? 1.02 : 1.0)
+                    .scaleEffect(isTargeted || isHovered ? 1.02 : 1.0)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isHovered)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isTargeted)
                 
                 VStack(spacing: 12) {
                     if let appIcon = appIcon {
