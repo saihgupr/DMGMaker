@@ -8,6 +8,10 @@ struct ContentView: View {
     @State private var backgroundURL: URL?
     @State private var dmgName: String = "My App"
     
+    // Drag states for visual feedback
+    @State private var isAppDropTargeted = false
+    @State private var isBackgroundDropTargeted = false
+
     var body: some View {
         ZStack {
             // Background material
@@ -28,9 +32,10 @@ struct ContentView: View {
                         title: appURL?.lastPathComponent ?? "Drop .app bundle",
                         icon: "app.badge",
                         isSelected: appURL != nil,
-                        appIcon: appIcon
+                        appIcon: appIcon,
+                        isTargeted: isAppDropTargeted
                     )
-                    .onDrop(of: [.fileURL], isTargeted: nil) { providers in
+                    .onDrop(of: [.fileURL], isTargeted: $isAppDropTargeted) { providers in
                         handleAppDrop(providers: providers)
                     }
                     
@@ -42,9 +47,10 @@ struct ContentView: View {
                     DropSquare(
                         title: backgroundURL?.lastPathComponent ?? "Custom Background",
                         icon: "photo.on.rectangle.angled",
-                        isSelected: backgroundURL != nil
+                        isSelected: backgroundURL != nil,
+                        isTargeted: isBackgroundDropTargeted
                     )
-                    .onDrop(of: [.fileURL], isTargeted: nil) { providers in
+                    .onDrop(of: [.fileURL], isTargeted: $isBackgroundDropTargeted) { providers in
                         handleBackgroundDrop(providers: providers)
                     }
                 }
