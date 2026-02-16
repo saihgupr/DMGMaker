@@ -8,8 +8,7 @@ class DMGEngine: ObservableObject {
     @Published var statusMessage = ""
     
     private func generateBackground(appName: String, size: NSSize) -> NSImage {
-        let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
-        let view = DMGBackgroundView(appName: appName, appsIconPath: customIconPath)
+        let view = DMGBackgroundView(appName: appName, appsIconPath: nil)
             .frame(width: size.width, height: size.height)
         
         let renderer = ImageRenderer(content: view)
@@ -60,8 +59,8 @@ class DMGEngine: ObservableObject {
             
             // 3. Generate Background with Arrow (Outside staging to avoid duplication)
             let bgPath = assetsDir.appendingPathComponent("background.png")
-            // Increased height to 520 to avoid cutting off text
-            let bgImage = generateBackground(appName: outputName, size: NSSize(width: 600, height: 520))
+            // Increased height to 600 for even more text room
+            let bgImage = generateBackground(appName: outputName, size: NSSize(width: 600, height: 600))
             if let tiffData = bgImage.tiffRepresentation, 
                let bitmap = NSBitmapImageRep(data: tiffData),
                let pngData = bitmap.representation(using: .png, properties: [:]) {
@@ -95,10 +94,10 @@ class DMGEngine: ObservableObject {
             var arguments = [
                 "--volname", outputName,
                 "--window-pos", "200", "120",
-                "--window-size", "600", "520",
+                "--window-size", "600", "600",
                 "--icon-size", "128",
-                "--icon", appName, "150", "200",
-                "--icon", appsDirName, "450", "200",
+                "--icon", appName, "150", "240",
+                "--icon", appsDirName, "450", "240",
                 "--background", bgPath.path,
                 "--hide-extension", appName,
                 "--hide-extension", appsDirName

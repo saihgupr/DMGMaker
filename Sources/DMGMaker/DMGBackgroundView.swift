@@ -3,7 +3,7 @@ import SwiftUI
 struct DMGBackgroundView: View {
     let appName: String
     let appsIconPath: String?
-    let windowSize: CGSize = CGSize(width: 600, height: 520)
+    let windowSize: CGSize = CGSize(width: 600, height: 600)
     
     var body: some View {
         ZStack {
@@ -50,17 +50,9 @@ struct DMGBackgroundView: View {
                             .frame(width: 80, height: 30)
                             .foregroundColor(.white.opacity(0.8))
                         
-                        // Applications Icon Area (Drawn into background for crispness)
-                        ZStack {
-                            if let iconPath = appsIconPath, let image = NSImage(contentsOfFile: iconPath) {
-                                Image(nsImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 115, height: 115) // Matched App Store visual weight
-                                    .offset(y: -5) // Visual adjustment for folder tab
-                            }
-                        }
-                        .frame(width: 140, height: 140)
+                        // Applications Placement Area (Transparent)
+                        Color.clear
+                            .frame(width: 140, height: 140)
                     }
                 }
                 .frame(width: 520, height: 200)
