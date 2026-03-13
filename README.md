@@ -1,5 +1,7 @@
 # DMGMaker 🚀
 
+![DMGMaker Hero Shot](images/Screenshot%202026-03-13%20at%208.28.22%20AM.png)
+
 A premium macOS DMG creation tool with live-rendered SwiftUI backgrounds, glassmorphism, and Retina support.
 
 ## Features
