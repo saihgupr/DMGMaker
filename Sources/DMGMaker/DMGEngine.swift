@@ -78,8 +78,8 @@ class DMGEngine: ObservableObject {
             try? fileManager.setAttributes([.extensionHidden: true], ofItemAtPath: appsSymlink.path)
             
             // Apply custom Applications folder icon
-            let customIconPath = "/Users/chrislapointe/Projects/CurrentProjects/DMGMaker/assets/applications-folder.png"
-            if let customImage = NSImage(contentsOfFile: customIconPath) {
+            if let customIconURL = Bundle.module.url(forResource: "applications-folder", withExtension: "png"),
+               let customImage = NSImage(contentsOf: customIconURL) {
                 NSWorkspace.shared.setIcon(customImage, forFile: appsSymlink.path, options: [])
             }
             
