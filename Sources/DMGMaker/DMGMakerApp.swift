@@ -12,9 +12,9 @@ struct DMGMakerApp: App {
             let appPath = args[appIdx + 1]
             let dmgName = args[nameIdx + 1]
             
-            print("🚀 Running CLI Mode")
-            print("📦 App: \(appPath)")
-            print("💾 Volume Name: \(dmgName)")
+            print("Running CLI Mode")
+            print("App: \(appPath)")
+            print("Volume Name: \(dmgName)")
             
             let appURL = URL(fileURLWithPath: appPath)
             
@@ -28,7 +28,7 @@ struct DMGMakerApp: App {
                     try? await Task.sleep(nanoseconds: 500_000_000)
                 }
                 
-                print("✅ \(engine.statusMessage)")
+                print("\(engine.statusMessage)")
                 exit(engine.statusMessage.contains("Error") ? 1 : 0)
             }
         }

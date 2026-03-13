@@ -1,7 +1,9 @@
-# DMGMaker 🚀
+# DMG Maker
 
-| <img src="images/1.png" width="500"> | <img src="images/2.png" width="500"> |
-| :---: | :---: |
+<p align="center">
+  <img src="images/1.png" width="49.5%">
+  <img src="images/2.png" width="49.5%">
+</p>
 
 A premium macOS DMG creation tool with live-rendered SwiftUI backgrounds, glassmorphism, and Retina support.
 
@@ -18,7 +20,7 @@ A premium macOS DMG creation tool with live-rendered SwiftUI backgrounds, glassm
 ### GUI Mode
 Simply run the app and drag your `.app` bundle and an optional background onto the drop zones.
 
-### CLI Mode (New! ✨)
+### CLI Mode (New!)
 Generate consistent, high-quality DMGs directly from your terminal or build scripts:
 
 ```bash
