@@ -8,6 +8,22 @@
 		<data>
 		zfA/9Wl3CTAShF6bZw9OqTouDLo=
 		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Info.plist</key>
+		<data>
+		7Wzio3s4AW21/eh7cLvlzd2go6U=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/AppIcon.icns</key>
+		<data>
+		zfA/9Wl3CTAShF6bZw9OqTouDLo=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/DefaultBackground.png</key>
+		<data>
+		c2CxzosXpbOCQUBOq+dDtPgkBeE=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/applications-folder.png</key>
+		<data>
+		68AmZZTJqjpROd+IsXq0ZZ1R5qs=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -16,6 +32,34 @@
 			<key>hash2</key>
 			<data>
 			vFppvpYbxlzyER6ERrdJgmJosqbUurKOUeBDoTKB42Q=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			5Swggrb1S1V7f7eFWADghFR3auQlTbTPx1+IdOWpaOc=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/AppIcon.icns</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vFppvpYbxlzyER6ERrdJgmJosqbUurKOUeBDoTKB42Q=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/DefaultBackground.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			I+l1t91c0AVItICIK0QP+XD4/v+tED8DNqbVzOK99e0=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/applications-folder.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			WLzzu0BF7G8U3LKDD9Jzz1X2+P8FKV+PAP73GagQMYc=
 			</data>
 		</dict>
 	</dict>

@@ -39,6 +39,11 @@ cp "$BINARY_PATH" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
 cp "Sources/DMGMaker/Info.plist" "$APP_BUNDLE/Contents/Info.plist"
 cp "Sources/DMGMaker/AppIcon.icns" "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
 
+# Copy SPM Resource Bundle (Required for Bundle.module to work)
+echo "📦 Copying Resource Bundle..."
+cp -R .build/apple/Products/Release/*.bundle "$APP_BUNDLE/Contents/Resources/" 2>/dev/null || \
+cp -R .build/release/*.bundle "$APP_BUNDLE/Contents/Resources/" 2>/dev/null || true
+
 # 4. Codesigning
 # Use identity from argument or environment if provided, otherwise Ad-Hoc
 SIGNING_IDENTITY="${1:-"-"}"
