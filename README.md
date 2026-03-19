@@ -37,8 +37,6 @@ The resulting DMG will be placed in the same directory as your input `.app` bund
 
 ## Technical Details
 
-- **Portability**: Uses internal Bundle resources for all icons and assets.
-- **Engine**: Wrapper around the established `create-dmg` utility, but with significantly enhanced visual rendering.
 - **Requirements**: macOS 14+.
 ## Support
 

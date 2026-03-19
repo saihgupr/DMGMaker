@@ -17,7 +17,8 @@ let package = Package(
             resources: [
                 .process("AppIcon.icns"),
                 .process("DefaultBackground.png"),
-                .process("applications-folder.png")
+                .process("applications-folder.png"),
+                .copy("Resources/create-dmg")
             ],
             linkerSettings: [
                 .unsafeFlags([

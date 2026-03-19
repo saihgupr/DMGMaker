@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>files</key>
+	<dict>
+		<key>Resources/AppIcon.icns</key>
+		<data>
+		zfA/9Wl3CTAShF6bZw9OqTouDLo=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Info.plist</key>
+		<data>
+		7Wzio3s4AW21/eh7cLvlzd2go6U=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/AppIcon.icns</key>
+		<data>
+		zfA/9Wl3CTAShF6bZw9OqTouDLo=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/DefaultBackground.png</key>
+		<data>
+		c2CxzosXpbOCQUBOq+dDtPgkBeE=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/applications-folder.png</key>
+		<data>
+		68AmZZTJqjpROd+IsXq0ZZ1R5qs=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/.this-is-the-create-dmg-repo</key>
+		<data>
+		2jmj7l5rSw0yVb/vlWAYkK/YBwk=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/create-dmg</key>
+		<data>
+		pHIGTt0I2SSQvxR4G2xmln+NLPE=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/support/eula-resources-template.xml</key>
+		<data>
+		6LOw5MRNyU+CtgSeSnIXY/3TEkU=
+		</data>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/support/template.applescript</key>
+		<data>
+		c3bDAZ+xTseIvdW0jUAFgYoCEdI=
+		</data>
+	</dict>
+	<key>files2</key>
+	<dict>
+		<key>Resources/AppIcon.icns</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vFppvpYbxlzyER6ERrdJgmJosqbUurKOUeBDoTKB42Q=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			5Swggrb1S1V7f7eFWADghFR3auQlTbTPx1+IdOWpaOc=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/AppIcon.icns</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vFppvpYbxlzyER6ERrdJgmJosqbUurKOUeBDoTKB42Q=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/DefaultBackground.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			I+l1t91c0AVItICIK0QP+XD4/v+tED8DNqbVzOK99e0=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/applications-folder.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			WLzzu0BF7G8U3LKDD9Jzz1X2+P8FKV+PAP73GagQMYc=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/.this-is-the-create-dmg-repo</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/create-dmg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			92T8FmEWlaaAjREEPA5+PLQsRT4dPum0rzAWotAnLes=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/support/eula-resources-template.xml</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			qATlM+nJlJGnTLRQLENbANkC3HpF02kwV6KWdOWEpws=
+			</data>
+		</dict>
+		<key>Resources/DMG Maker_DMGMaker.bundle/Contents/Resources/create-dmg/support/template.applescript</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			E3J8eTDFC+Y5oesZHok/HrxywnAmjUYRORtBQQo+hio=
+			</data>
+		</dict>
+	</dict>
+	<key>rules</key>
+	<dict>
+		<key>^Resources/</key>
+		<true/>
+		<key>^Resources/.*\.lproj/</key>
+		<dict>
+			<key>optional</key>
+			<true/>
+			<key>weight</key>
+			<real>1000</real>
+		</dict>
+		<key>^Resources/.*\.lproj/locversion.plist$</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>1100</real>
+		</dict>
+		<key>^Resources/Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
+		</dict>
+		<key>^version.plist$</key>
+		<true/>
+	</dict>
+	<key>rules2</key>
+	<dict>
+		<key>.*\.dSYM($|/)</key>
+		<dict>
+			<key>weight</key>
+			<real>11</real>
+		</dict>
+		<key>^(.*/)?\.DS_Store$</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>2000</real>
+		</dict>
+		<key>^(Frameworks|SharedFrameworks|PlugIns|Plug-ins|XPCServices|Helpers|MacOS|Library/(Automator|Spotlight|LoginItems))/</key>
+		<dict>
+			<key>nested</key>
+			<true/>
+			<key>weight</key>
+			<real>10</real>
+		</dict>
+		<key>^.*</key>
+		<true/>
+		<key>^Info\.plist$</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>20</real>
+		</dict>
+		<key>^PkgInfo$</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>20</real>
+		</dict>
+		<key>^Resources/</key>
+		<dict>
+			<key>weight</key>
+			<real>20</real>
+		</dict>
+		<key>^Resources/.*\.lproj/</key>
+		<dict>
+			<key>optional</key>
+			<true/>
+			<key>weight</key>
+			<real>1000</real>
+		</dict>
+		<key>^Resources/.*\.lproj/locversion.plist$</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>1100</real>
+		</dict>
+		<key>^Resources/Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
+		</dict>
+		<key>^[^/]+$</key>
+		<dict>
+			<key>nested</key>
+			<true/>
+			<key>weight</key>
+			<real>10</real>
+		</dict>
+		<key>^embedded\.provisionprofile$</key>
+		<dict>
+			<key>weight</key>
+			<real>20</real>
+		</dict>
+		<key>^version\.plist$</key>
+		<dict>
+			<key>weight</key>
+			<real>20</real>
+		</dict>
+	</dict>
+</dict>
+</plist>

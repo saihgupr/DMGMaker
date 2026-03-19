@@ -27,12 +27,21 @@ class DMGEngine: ObservableObject {
         statusMessage = "Preparing staging area..."
         
         // Find create-dmg
-        let paths = ["/opt/homebrew/bin/create-dmg", "/usr/local/bin/create-dmg"]
         var createDmgPath: String?
-        for path in paths {
-            if FileManager.default.fileExists(atPath: path) {
-                createDmgPath = path
-                break
+        
+        // 1. Check for bundled version first (Resources/create-dmg/create-dmg)
+        if let bundledURL = Bundle.module.url(forResource: "create-dmg", withExtension: nil, subdirectory: "create-dmg") {
+            createDmgPath = bundledURL.path
+        }
+        
+        // 2. Fallback to system paths if bundled not found
+        if createDmgPath == nil {
+            let paths = ["/opt/homebrew/bin/create-dmg", "/usr/local/bin/create-dmg"]
+            for path in paths {
+                if FileManager.default.fileExists(atPath: path) {
+                    createDmgPath = path
+                    break
+                }
             }
         }
         
