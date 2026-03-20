@@ -3,7 +3,7 @@
 <p align="center">
   <img src="images/0.png" width="32%">
   <img src="images/1.png" width="32%">
-  <img src="images/2.1.png" width="32%">
+  <img src="images/2.2.png" width="32%">
 </p>
 
 A premium macOS DMG creation tool with live-rendered SwiftUI backgrounds, glassmorphism, and Retina support.
