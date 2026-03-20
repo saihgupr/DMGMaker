@@ -42,7 +42,7 @@ struct DMGBackgroundView: View {
                 // Positioned with a fixed top padding of 100px
                 // Total height of track is 200px, so center is exactly at Y=200
                 Spacer()
-                    .frame(height: 100)
+                    .frame(height: 113)
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 32)

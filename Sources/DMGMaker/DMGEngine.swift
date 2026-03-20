@@ -105,8 +105,8 @@ class DMGEngine: ObservableObject {
                 "--window-pos", "200", "120",
                 "--window-size", "600", "600",
                 "--icon-size", "128",
-                "--icon", appName, "150", "240",
-                "--icon", appsDirName, "450", "240",
+                "--icon", appName, "150", "253",
+                "--icon", appsDirName, "450", "253",
                 "--background", bgPath.path,
                 "--hide-extension", appName,
                 "--hide-extension", appsDirName
