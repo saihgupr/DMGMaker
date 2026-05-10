@@ -66,6 +66,15 @@ class DMGEngine: ObservableObject {
             let stagingAppURL = tempDir.appendingPathComponent(appName)
             try fileManager.copyItem(at: appURL, to: stagingAppURL)
             
+            // 2b. Check for Fix Security script next to the app
+            let securityFixName = "Fix Security.command"
+            let securityFixURL = appURL.deletingLastPathComponent().appendingPathComponent(securityFixName)
+            var hasSecurityFix = false
+            if fileManager.fileExists(atPath: securityFixURL.path) {
+                try? fileManager.copyItem(at: securityFixURL, to: tempDir.appendingPathComponent(securityFixName))
+                hasSecurityFix = true
+            }
+            
             // 3. Generate Background with Arrow (Outside staging to avoid duplication)
             let bgPath = assetsDir.appendingPathComponent("background.png")
             // Increased height to 600 for even more text room
@@ -111,6 +120,10 @@ class DMGEngine: ObservableObject {
                 "--hide-extension", appName,
                 "--hide-extension", appsDirName
             ]
+            
+            if hasSecurityFix {
+                arguments.append(contentsOf: ["--icon", securityFixName, "300", "430"])
+            }
             
             arguments.append(contentsOf: [outputDMG.path, tempDir.path])
             process.arguments = arguments

@@ -38,10 +38,30 @@ The resulting DMG will be placed in the same directory as your input `.app` bund
 ## Technical Details
 
 - **Requirements**: macOS 14+.
+## Installation
+
+1. **Download `DMGMaker.dmg`** from [Releases](https://github.com/saihgupr/DMGMaker/releases)
+2. Open the DMG and drag **`DMG Maker.app`** to your **Applications** folder
+3. **Fix the security warning** - on macOS Sequoia/Tahoe, double-clicking the app shows *"Apple could not verify..."* with no "Open Anyway" button. Use one of these fixes:
+   - **Easy**: Double-click **`Fix Security.command`** (included in the DMG) -> Terminal opens, runs the fix, confirms with a dialog. *(macOS may ask permission to run it - click Allow.)*
+   - **Terminal**: `xattr -cr /Applications/DMG\ Maker.app`
+4. Open **`DMG Maker.app`** normally.
+
+## Security & Gatekeeper (macOS)
+
+DMG Maker is not signed with a paid Apple Developer certificate. On macOS Sequoia and Tahoe, this means the app shows **only "Move to Trash"** when first launched - the "Open Anyway" button no longer appears in the dialog.
+
+**The fix is a one-liner:**
+```bash
+xattr -cr /Applications/DMG\ Maker.app
+```
+
+Or use the **`Fix Security.command`** included in the DMG - just double-click it after dragging the app to Applications.
+
 ## Support
 
 If you find DMGMaker useful, please consider:
-- **⭐ Starring the repo** to help others discover it.
-- **☕ [Buying me a coffee](https://ko-fi.com/saihgupr)** to support further development.
+- **Starring the repo** to help others discover it.
+- **[Buying me a coffee](https://ko-fi.com/saihgupr)** to support further development.
 
 Your support helps keep this project free and open-source!
